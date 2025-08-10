@@ -1,1 +1,0 @@
-# vynoxlogin-inventory
