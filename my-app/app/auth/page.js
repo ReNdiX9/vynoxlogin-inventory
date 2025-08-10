@@ -5,8 +5,10 @@ import { auth } from "../../firebase/firebase";
 import { useState } from "react";
 import Image from "next/image";
 import { CiCalendar } from "react-icons/ci";
+import { firebaseConfig } from "../../firebase/firebase";
 
 export default function LoginPage() {
+  // console.log("Firebase Config:", firebaseConfig);
   return (
     <div className="min-h-screen min-w-screen bg-blue-800">
       {/* NAVBAR & HEADER */}
