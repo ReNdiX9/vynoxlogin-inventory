@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,6 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import { signInWithEmailAndPassword, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
 import { FaFacebook, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { FiMenu, FiX } from "react-icons/fi";
 
 //Error -> Friendly message.This function converts different firebase errors into friendly from.
 function extractFirebaseCode(err) {
@@ -88,6 +89,20 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [resetMsg, setResetMsg] = useState("");
   const [resetLoading, setResetLoading] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => (document.body.style.overflow = "");
+  }, [mobileOpen]);
+  //mobile nav
+  const NAV = [
+    { label: "Log in", href: "/login" },
+    { label: "Gift Cards", href: "/giftcards" },
+    { label: "Services", href: "/services" },
+    { label: "About", href: "/about" },
+    { label: "Contact", href: "/contact" },
+  ];
 
   //main variables
   const ERROR_RED = "#ef4444";
@@ -160,14 +175,26 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#1c2e5c] overflow-x-hidden">
+    <div className="min-h-screen w-full bg-[#1c2e5c] overflow-x-hidden flex flex-col">
       {/* NAVBAR & HEADER */}
       <header className="flex items-center justify-between shadow-md px-5 py-3 bg-black">
+        {/* Logo (unchanged) */}
         <div className="flex items-center">
-          <Image src="/vynoxlogo.jpg" width={50} height={50} alt="Logo picture" className="rounded-xl" priority />
+          <Link href="#home">
+            <Image
+              src="/vynoxlogo.jpg"
+              width={50}
+              height={50}
+              alt="Logo picture"
+              className="rounded-xl"
+              priority
+              title="logo&homepage"
+            />
+          </Link>
         </div>
 
-        <nav className="flex items-center justify-center">
+        {/* Desktop nav  */}
+        <nav className="max-[879px]:hidden flex items-center justify-center">
           <ul className="flex items-center justify-center list-none m-0 p-1 gap-12">
             {["Log in", "Gift Cards", "Services", "About", "Contact"].map((link) => (
               <li key={link} className="flex justify-center items-center p-1">
@@ -187,10 +214,78 @@ export default function LoginPage() {
             </li>
           </ul>
         </nav>
+
+        {/* Mobile hamburger — visible only below 880px */}
+        <button
+          onClick={() => setMobileOpen(true)}
+          className="[@media(min-width:880px)]:hidden p-2 rounded-lg border border-gray-700 text-white"
+          aria-label="Open menu"
+          aria-controls="mobile-menu"
+          aria-expanded={mobileOpen}
+        >
+          <FiMenu className="text-2xl" />
+        </button>
+
+        {/* Mobile drawer */}
+        <div
+          className={`fixed inset-0 z-50 max-[879px]:block hidden ${
+            mobileOpen ? "visible pointer-events-auto" : "invisible pointer-events-none"
+          }`}
+        >
+          {/* Backdrop */}
+          <div
+            className={`absolute inset-0 bg-black/60 transition-opacity ${mobileOpen ? "opacity-100" : "opacity-0"}`}
+            onClick={() => setMobileOpen(false)}
+          />
+
+          {/* Panel */}
+          <aside
+            id="mobile-menu"
+            className={`ml-auto h-full w-80 max-w-[85%] bg-black border-l border-gray-800 p-6 flex flex-col gap-6 transition-transform duration-300 ${
+              mobileOpen ? "translate-x-0" : "translate-x-full"
+            }`}
+            onKeyDown={(e) => e.key === "Escape" && setMobileOpen(false)}
+            role="dialog"
+            aria-modal="true"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-white font-semibold text-xl ">Menu</span>
+              <button
+                onClick={() => setMobileOpen(false)}
+                className="p-2 rounded-lg border border-gray-700"
+                aria-label="Close menu"
+              >
+                <FiX className="text-xl" />
+              </button>
+            </div>
+
+            <ul className="flex flex-col gap-4">
+              {NAV.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="block py-2 text-base text-white hover:text-[#FFCC66] transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            <button
+              onClick={() => setMobileOpen(false)}
+              className="mt-4 flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#FFCC66] to-[#FF7E5F] px-5 py-3 text-white font-semibold shadow-[0_0_10px_rgba(255,204,102,0.6),0_0_20px_rgba(255,126,95,0.5)]"
+            >
+              <CiCalendar className="text-lg" />
+              <span>Book now</span>
+            </button>
+          </aside>
+        </div>
       </header>
 
       {/* MAIN CONTENT FORM */}
-      <main className=" flex items-center justify-center px-6 py-12 ">
+      <main className=" flex items-center justify-center px-6 py-12 flex-1">
         <div className="w-full " style={{ maxWidth: "600px" }}>
           <h1 className="text-3xl font-bold text-[#FFCC66] mb-8 text-center">Log in to your account</h1>
 
@@ -315,15 +410,21 @@ export default function LoginPage() {
       </main>
 
       {/* FOOTER */}
-      <footer className="bg-black text-gray-300 py-4 w-full px-4">
-        <div className="mx-auto max-w-6xl px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+      <footer className="bg-black text-gray-300 p-4 border-t border-gray-800 mt-auto">
+        <div className="mx-auto flex flex-col md:flex-row justify-around items-center gap-6 md:flex-wrap">
           {/* Logo */}
-          <div className="flex flex-col items-center justify-center px-4">
-            <Image src="/vynoxlogo.jpg" width={100} height={100} alt="Logo" className="rounded-md " />
+          <div className="flex flex-none items-center justify-center md:basis-1/2 lg:basis-1/4">
+            <Image
+              src="/vynoxlogo.jpg"
+              width={100}
+              height={100}
+              alt="Logo"
+              className="rounded-md shrink-0 w-[100px] h-[100px] "
+            />
           </div>
 
           {/* Navigation */}
-          <nav className="flex  gap-8 text-sm px-4">
+          <nav className="flex  gap-4 sm:gap-8 text-sm px-4   items-center  py-2 sm:py-0">
             <Link href="/" className="hover:text-[#FFCC66] transition-colors hover:underline underline-offset-4">
               Home
             </Link>
@@ -339,16 +440,32 @@ export default function LoginPage() {
             <Link href="/contact" className="hover:text-[#FFCC66] transition-colors hover:underline underline-offset-4">
               Contact
             </Link>
+            <Link
+              href="/giftcards"
+              className="hover:text-[#FFCC66] transition-colors hover:underline underline-offset-4"
+            >
+              Gift Cards
+            </Link>
           </nav>
 
           {/* Contact Info */}
           <div className="flex flex-col gap-2 text-sm px-4">
-            <p>📞 +1-587-438-7822</p>
-            <a href="mailto:mohamadalhajj2002@gmail.com" className="hover:text-[#FFCC66] transition-colors">
-              📧 mohamadalhajj2002@gmail.com
-            </a>
-            <p>📍 2806 Ogden Rd SE, Calgary, AB</p>
-            <p>🕘 Mon–Fri: 9am–6pm</p>
+            <p>+1-587-438-7822</p>
+            <Link
+              href="mailto:mohamadalhajj2002@gmail.com"
+              className="hover:text-[#FFCC66] transition-all hover:underline underline-offset-4"
+            >
+              mohamadalhajj2002@gmail.com
+            </Link>
+            <Link
+              href="https://maps.app.goo.gl/fPGxCvfNLQTd28wRA"
+              target="_blank"
+              className="hover:text-[#FFCC66] transition-all hover:underline underline-offset-4"
+            >
+              2806 Ogden Rd SE, Calgary, AB
+            </Link>
+
+            <p>Mon–Fri: 9am–6pm</p>
           </div>
 
           {/* Social Links */}
@@ -356,20 +473,20 @@ export default function LoginPage() {
             <h4 className="text-[#FFCC66] font-semibold mb-1 text-center">Follow Us</h4>
             <div className="flex gap-4 text-lg">
               <a href="#" className="hover:text-[#FFCC66] transition-colors ">
-                <FaFacebook />
+                <FaFacebook size={24} />
               </a>
               <a href="#" className="hover:text-[#FFCC66] transition-colors">
-                <FaInstagram />
+                <FaInstagram size={24} />
               </a>
               <a href="#" className="hover:text-[#FFCC66] transition-colors">
-                <FaLinkedinIn />
+                <FaLinkedinIn size={24} />
               </a>
             </div>
           </div>
         </div>
 
         {/* Bottom note */}
-        <hr className="m-4 "></hr>
+        <hr className=" border-gray-500  my-4"></hr>
         <p className="text-xs text-gray-500 text-center ">
           &copy; {new Date().getFullYear()} Vynox Inventory. All rights reserved.
         </p>
