@@ -392,7 +392,7 @@ export default function LoginPage() {
               type="button"
               onClick={handleGoogleAuth}
               disabled={isSubmitting || resetLoading}
-              className="w-full p-2 border-[#424c66] rounded-lg flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 ease-in-out hover:scale-105 hover:border-[#FFCC66] hover:shadow border-2 disabled:opacity-60"
+              className="w-full p-2 border-[#424c66] rounded-lg flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 ease-in-out hover:scale-105 hover:border-[#FFCC66] hover:shadow border-2 disabled:opacity-60 text-white"
             >
               <FcGoogle className="w-6 h-6" />
               Continue with Google
@@ -450,22 +450,22 @@ export default function LoginPage() {
 
           {/* Contact Info */}
           <div className="flex flex-col gap-2 text-sm px-4">
-            <p>+1-587-438-7822</p>
+            <p>📞+1-587-438-7822</p>
             <Link
               href="mailto:mohamadalhajj2002@gmail.com"
               className="hover:text-[#FFCC66] transition-all hover:underline underline-offset-4"
             >
-              mohamadalhajj2002@gmail.com
+              📧mohamadalhajj2002@gmail.com
             </Link>
             <Link
               href="https://maps.app.goo.gl/fPGxCvfNLQTd28wRA"
               target="_blank"
               className="hover:text-[#FFCC66] transition-all hover:underline underline-offset-4"
             >
-              2806 Ogden Rd SE, Calgary, AB
+              📍2806 Ogden Rd SE, Calgary, AB
             </Link>
 
-            <p>Mon–Fri: 9am–6pm</p>
+            <p>🕛Mon–Fri: 9am–6pm</p>
           </div>
 
           {/* Social Links */}
