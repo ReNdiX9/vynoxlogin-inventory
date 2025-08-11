@@ -399,7 +399,7 @@ export default function LoginPage() {
             </button>
 
             {/*Sign Up*/}
-            <p className="text-center text-sm mt-2">
+            <p className="text-center text-sm mt-2 text-white">
               Don&apos;t have an account?{" "}
               <Link href="/signup" className="text-[#6699FF] hover:underline font-semibold">
                 Sign up
