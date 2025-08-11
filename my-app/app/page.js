@@ -8,7 +8,7 @@ export default function Home() {
           <Link href="/auth/">Go to LogIn Page</Link>
         </li>
         <li className="hover:underline italic">
-          <Link href="#">Go to Inventory Page</Link>
+          <Link href="/inventory">Go to Inventory Page</Link>
         </li>
       </ul>
     </main>
