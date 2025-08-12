@@ -472,13 +472,21 @@ export default function LoginPage() {
           <div className="flex flex-col gap-2 px-4">
             <h4 className="text-[#FFCC66] font-semibold mb-1 text-center">Follow Us</h4>
             <div className="flex gap-4 text-lg">
-              <a href="#" className="hover:text-[#FFCC66] transition-colors ">
+              <a
+                href="https://www.facebook.com/share/1AoCRMNVMC/?mibextid=wwXIfr"
+                target="_blank"
+                className="hover:text-[#FFCC66] transition-colors "
+              >
                 <FaFacebook size={24} />
               </a>
-              <a href="#" className="hover:text-[#FFCC66] transition-colors">
+              <a
+                href="https://www.instagram.com/vynoxautodetailing?igsh=aWpxY2hqNjdweWQx"
+                target="_blank"
+                className="hover:text-[#FFCC66] transition-colors"
+              >
                 <FaInstagram size={24} />
               </a>
-              <a href="#" className="hover:text-[#FFCC66] transition-colors">
+              <a href="#" target="_blank" className="hover:text-[#FFCC66] transition-colors">
                 <FaLinkedinIn size={24} />
               </a>
             </div>
